@@ -4,20 +4,26 @@ import sys
 import json
 import argparse
 import os
+# import time
 import datetime
 from datetime import date, timedelta
-import requests
-from bs4 import BeautifulSoup
-import magnet2torrent
-
+#import requests
+#from bs4 import BeautifulSoup
+import subprocess
+import grab
+# import magnet2torrent
 HOME = os.path.expanduser("~")
 DB_PATH = HOME+"/.dbmagazines"
 TPBURL = "https://pirateproxy.pw"
 TODAY = date.today()
 YESTERDAY = date.today() - timedelta(days=1)
-# TORRENTS_PATH = "/sda1/downloads/deluge/watch/newspapers-magazines"
-TORRENTS_PATH = "."
+TORRENTS_PATH = "/mnt/sda1/downloads/deluge/watch/publications"
+#TORRENTS_PATH = "."
 def main():
+    """
+    Command-line interface to subscribe,unsubscribe from newspapers,magazines and
+    update/download them.
+    """
     parser = argparse.ArgumentParser(
         description='Search,Download,Subscribe to Magazines,Newspapers,..')
     parser.add_argument('--u',
@@ -48,6 +54,9 @@ def main():
         print(json.dumps(database))
 
 def subscribe(name):
+    """
+    Change subscriptions status to subscribed of a magazine,newspaper.
+    """
     file = open(DB_PATH)
     database = json.loads(file.read().strip())
     file.close()
@@ -55,7 +64,11 @@ def subscribe(name):
     file = open(DB_PATH, 'w')
     file.write(json.dumps(database, sort_keys=True, indent=4, separators=(',', ': ')))
     file.close()
+
 def unsubscribe(name):
+    """
+    Change subscriptions status to unsubscribed of a magazine,newspaper.
+    """
     file = open(DB_PATH)
     database = json.loads(file.read().strip())
     file.close()
@@ -63,7 +76,11 @@ def unsubscribe(name):
     file = open(DB_PATH, 'w')
     file.write(json.dumps(database, sort_keys=True, indent=4, separators=(',', ': ')))
     file.close()
+
 def add(name, value):
+    """
+    Add a magazine,newspaper.
+    """
     file = open(DB_PATH)
     database = json.loads(file.read().strip())
     file.close()
